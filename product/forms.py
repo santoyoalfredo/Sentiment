@@ -14,7 +14,14 @@ class ReviewForm(forms.ModelForm):
 
     class Meta:
         model = Review
-        fields = ['product', 'user', 'score', 'flag']
+        fields = ['review_text']
+
+class ReviewFormAdmin(forms.ModelForm):
+    review_text = forms.CharField(widget=forms.Textarea)
+
+    class Meta:
+        model = Review
+        fields = ['product', 'user', 'score', 'flag', 'review_text']
 
 class ProductForm(forms.ModelForm):
     product_image = forms.ImageField(widget=forms.FileInput)

@@ -29,6 +29,7 @@ def create_review(request, product_id):
         product.average_score = product.review_set.aggregate(Avg('score')).get('score__avg', 0.00)
         if product.average_score != None:
             product.average_score = round(product.average_score, 1)
+            product.save()
 
         return render(request, 'detail.html', {'product': product})
 
@@ -47,6 +48,7 @@ def detail(request, product_id):
         product.average_score = product.review_set.aggregate(Avg('score')).get('score__avg', 0.00)
         if product.average_score != None:
             product.average_score = round(product.average_score, 1)
+            product.save()
         return render(request, 'detail.html', {'product': product, 'user': user})
 
 def index(request):
