@@ -9,6 +9,7 @@ class Product(models.Model):
     type = models.CharField(max_length=100)
     product_image = models.CharField(max_length=1000)
     product_desc = models.TextField(max_length=2000)
+    average_score = models.DecimalField(max_digits=8, decimal_places=1, default=0)
 
     def get_absolute_url(self):
         return reverse('product:detail', kwargs={'pk': self.pk})

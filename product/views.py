@@ -1,9 +1,11 @@
 from django.contrib.auth import authenticate, login
 from django.contrib.auth import logout
+from django.db.models import Avg
 from django.shortcuts import render, get_object_or_404
 from .forms import UserForm, ReviewForm
 from .models import Product, Review
 from vaderSentiment.vaderSentiment import sentiment as vaderSentiment
+
 
 
 def detail(request, product_id):
@@ -12,6 +14,9 @@ def detail(request, product_id):
     else:
         user = request.user
         product = get_object_or_404(Product, pk=product_id)
+        product.average_score = product.review_set.aggregate(Avg('score')).get('score__avg', 0.00)
+        if product.average_score != None:
+            product.average_score = round(product.average_score, 1)
         return render(request, 'detail.html', {'product': product, 'user': user})
 
 
@@ -72,13 +77,15 @@ def register(request):
 def create_review(request, product_id):
     form = ReviewForm(request.POST or None, request.FILES or None)
     product = get_object_or_404(Product, pk=product_id)
+    product.average_score = product.review_set.aggregate(Avg('score')).get('score__avg', 0.00)
+    if product.average_score != None:
+        product.average_score = round(product.average_score, 1)
     if form.is_valid():
         review = form.save(commit=False)
         review.product = product
         review.review_text = form.cleaned_data['review_text']
         review.user = request.user
         s = vaderSentiment(review.review_text)
-        print(s)
         if s['compound'] < 0:
             review.score = 5 - ((s['compound'] * -1) * 5)
         elif s['compound'] > 0:
@@ -88,6 +95,10 @@ def create_review(request, product_id):
 
 
         review.save()
+        product.average_score = product.review_set.aggregate(Avg('score')).get('score__avg', 0.00)
+        if product.average_score != None:
+            product.average_score = round(product.average_score, 1)
+
         return render(request, 'detail.html', {'product': product})
 
     context = {
