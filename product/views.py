@@ -78,10 +78,11 @@ def create_review(request, product_id):
         review.review_text = form.cleaned_data['review_text']
         review.user = request.user
         s = vaderSentiment(review.review_text)
-        if s < 0:
-            review.score = 5 - ((s * -1) * 5)
-        elif s > 0:
-            review.score = 5 + (s * 5)
+        print(s)
+        if s['compound'] < 0:
+            review.score = 5 - ((s['compound'] * -1) * 5)
+        elif s['compound'] > 0:
+            review.score = 5 + (s['compound'] * 5)
         else:
             review.score = 0
 
