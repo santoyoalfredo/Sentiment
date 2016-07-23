@@ -8,19 +8,19 @@ from vaderSentiment.vaderSentiment import sentiment as vaderSentiment
 
 def detail(request, product_id):
     if not request.user.is_authenticated():
-        return render(request, 'product/login.html')
+        return render(request, 'login.html')
     else:
         user = request.user
         product = get_object_or_404(Product, pk=product_id)
-        return render(request, 'product/detail.html', {'product': product, 'user': user})
+        return render(request, 'detail.html', {'product': product, 'user': user})
 
 
 def index(request):
     if not request.user.is_authenticated():
-        return render(request, 'product/login.html')
+        return render(request, 'login.html')
     else:
         products = Product.objects.all()
-        return render(request, 'product/index.html', {'products': products})
+        return render(request, 'index.html', {'products': products})
 
 
 def logout_user(request):
@@ -29,7 +29,7 @@ def logout_user(request):
     context = {
         "form": form,
     }
-    return render(request, 'product/login.html', context)
+    return render(request, 'login.html', context)
 
 
 def login_user(request):
@@ -41,12 +41,12 @@ def login_user(request):
             if user.is_active:
                 login(request, user)
                 products = Product.objects.all()
-                return render(request, 'product/index.html', {'products': products})
+                return render(request, 'index.html', {'products': products})
             else:
-                return render(request, 'product/login.html', {'error_message': 'Your account has been disabled'})
+                return render(request, 'login.html', {'error_message': 'Your account has been disabled'})
         else:
-            return render(request, 'product/login.html', {'error_message': 'Invalid login'})
-    return render(request, 'product/login.html')
+            return render(request, 'login.html', {'error_message': 'Invalid login'})
+    return render(request, 'login.html')
 
 
 def register(request):
@@ -62,11 +62,11 @@ def register(request):
             if user.is_active:
                 login(request, user)
                 products = Product.objects.all()
-                return render(request, 'product/index.html', {'products': products})
+                return render(request, 'index.html', {'products': products})
     context = {
         "form": form,
     }
-    return render(request, 'product/register.html', context)
+    return render(request, 'register.html', context)
 
 
 def create_review(request, product_id):
@@ -87,11 +87,11 @@ def create_review(request, product_id):
 
 
         review.save()
-        return render(request, 'product/detail.html', {'product': product})
+        return render(request, 'detail.html', {'product': product})
 
     context = {
         'product': product,
         'form': form,
     }
-    return render(request, 'product/create_review.html', context)
+    return render(request, 'create_review.html', context)
 
