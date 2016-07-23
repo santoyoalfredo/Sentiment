@@ -2,13 +2,12 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>{% block title %}Sentiment{% endblock %}</title>
+    <title>Sentiment | {% block title %}{% endblock %}</title>
     {% include 'css.html' %}
 </head>
 <body>
 <nav class="navbar navbar-inverse">
     <div class="container-fluid">
-
         <!-- Header -->
         <div class="navbar-header">
             <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#topNavBar">
@@ -18,7 +17,6 @@
             </button>
             <a class="navbar-brand" href="{% url 'index' %}">Sentiment</a>
         </div>
-
         <!-- Items -->
         <div class="collapse navbar-collapse" id="topNavBar">
             <ul class="nav navbar-nav">
@@ -26,7 +24,6 @@
                 <li class="{% block login_active %}{% endblock %}"><a href="{% url 'login_user' %}">Log In</a></li>
             </ul>
         </div>
-
     </div>
 </nav>
 {% block body %}

@@ -1,13 +1,10 @@
 {% extends 'base.html' %}
-{% block title %}{{ product }}{% endblock %}
+{% block title %}{{ product.name }}{% endblock %}
 {% block products_active %}active{% endblock %}
 
 {% block body %}
 <div class="container-fluid">
-
     <div class="row">
-
-        <!-- Left Album Info -->
         <div class="col-sm-4 col-md-3">
             <div class="panel panel-default">
                 <div class="panel-body">
@@ -25,13 +22,9 @@
                 </div>
             </div>
         </div>
-
-        <!-- Right Song Info -->
         <div class="col-sm-8 col-md-9">
-
             <div class="panel panel-default">
                 <div class="panel-body">
-
                     <h3><strong>Product Information</strong></h3>
                     <h4 style="margin-top: 20px">Description: </h4>
                     <h5><em>{{ product.product_desc }}</em></h5>
@@ -41,7 +34,6 @@
                     {% endif %}
 
                     <h4 style="margin-top: 40px">Reviews</h4>
-
                     <table class="table" style="table-layout: fixed; width: 100%">
                         <thead>
                         <tr>
@@ -62,16 +54,11 @@
                     </table>
                 </div>
             </div>
-
             <ul class="nav nav-pills" style="margin-bottom: 10px;">
                 <li role="presentation"><a href="{% url 'create_review' product.id %}">Comment</a></li>
                 <li role="presentation"><a href="#">Add to Cart</a></li>
             </ul>
-
         </div>
-
     </div>
-
 </div>
-
 {% endblock %}

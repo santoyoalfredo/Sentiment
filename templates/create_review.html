@@ -4,10 +4,7 @@
 
 {% block body %}
 <div class="container-fluid">
-
     <div class="row">
-
-        <!-- Left Album Info -->
         <div class="col-sm-4 col-md-3">
             <div class="panel panel-default">
                 <div class="panel-body">
@@ -25,10 +22,7 @@
                 </div>
             </div>
         </div>
-
-        <!-- Right Song Info -->
         <div class="col-sm-8 col-md-9">
-
             <div class="panel panel-default">
                 <div class="panel-body">
                     <h3>Add a Comment</h3>
@@ -47,16 +41,11 @@
                     </form>
                 </div>
             </div>
-
             <ul class="nav nav-pills" style="margin-bottom: 10px;">
                 <li role="presentation" class="active"><a href="{% url 'create_review' product.id %}">Comment</a></li>
                 <li role="presentation"><a href="#">Add to Cart</a></li>
             </ul>
-
         </div>
     </div>
-
 </div>
-
 {% endblock %}
-
