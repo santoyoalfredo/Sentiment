@@ -45,10 +45,22 @@ def detail(request, product_id):
     else:
         user = request.user
         product = get_object_or_404(Product, pk=product_id)
-        product.average_score = product.review_set.aggregate(Avg('score')).get('score__avg', 0.00)
-        if product.average_score != None:
-            product.average_score = round(product.average_score, 1)
-            product.save()
+        # product.average_score = product.review_set.aggregate(Avg('score')).get('score__avg', 0.00)
+        # if product.average_score != None:
+        #     product.average_score = round(product.average_score, 1)
+        #     product.save()
+        return render(request, 'detail.html', {'product': product, 'user': user})
+
+def flag_review(request, product_id, review_id):
+    if not request.user.is_authenticated():
+        return render(request, 'login.html')
+    else:
+        user = request.user
+        review = get_object_or_404(Review, pk=review_id)
+        product = get_object_or_404(Product, pk=product_id)
+        review.flag = True
+        print(review)
+        review.save()
         return render(request, 'detail.html', {'product': product, 'user': user})
 
 def index(request):

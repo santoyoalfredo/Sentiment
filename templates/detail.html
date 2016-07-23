@@ -48,6 +48,11 @@
                                 <td>{{ review.user }}</td>
                                 <td style="word-wrap: break-word">{{ review.review_text }}</td>
                                 <td>{{ review.score }}</td>
+                                {% if review.flag = False %}
+                                <td><a href="{% url 'flag_review' product.id review.id %}" class="btn btn-primary btn-sm btn-block" role="button">Flag Comment</a></td>
+                                {% else %}
+                                <td><button class="btn btn-primary btn-sm btn-block" disabled="disabled" role="button">Flagged For Review</a></td>
+                                {% endif %}
                             </tr>
                         {% endfor %}
                         </tbody>

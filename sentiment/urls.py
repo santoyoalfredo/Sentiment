@@ -35,7 +35,8 @@ urlpatterns = [
     url(r'^login_user/$', views.login_user, name='login_user'),
     url(r'^logout_user/$', views.logout_user, name='logout_user'),
     url(r'^(?P<product_id>[0-9]+)/$', views.detail, name='detail'),
-    url(r'^(?P<product_id>[0-9]+)/create_review/$', views.create_review, name='create_review')
+    url(r'^(?P<product_id>[0-9]+)/create_review/$', views.create_review, name='create_review'),
+    url(r'^(?P<product_id>[0-9]+)/(?P<review_id>[0-9]+)/$', views.flag_review, name='flag_review')
 ]+ static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
 
 if settings.DEBUG:
