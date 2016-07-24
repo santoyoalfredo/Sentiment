@@ -12,15 +12,21 @@ def admin(request):
     if not request.user.is_authenticated():
         return render(request, 'login.html')
     else:
+        return render(request, 'admin.html')
+
+def adminProduct(request):
+    if not request.user.is_authenticated():
+        return render(request, 'login.html')
+    else:
         form = DeleteProductForm
         products = Product.objects.all()
         context = {
                 'products': products,
                 'form': form
             }
-        return render(request, 'admin.html', context)
+        return render(request, 'admin_product.html', context)
 
-def adminReviews(request):
+def adminReview(request):
     if not request.user.is_authenticated():
         return render(request, 'login.html')
     else:
@@ -30,7 +36,7 @@ def adminReviews(request):
                 'reviews': reviews,
                 'form': form
             }
-        return render(request, 'admin_reviews.html', context)
+        return render(request, 'admin_review.html', context)
 
 def add_product(request):
     if not request.user.is_authenticated():
@@ -69,9 +75,6 @@ def create_review(request, product_id):
 
             return redirect(reverse('detail', kwargs={'product_id': product_id}), context=context)
 
-    product.average_score = product.review_set.aggregate(Avg('score')).get('score__avg', 0.00)
-    if product.average_score != None:
-        product.average_score = round(product.average_score, 1)
     if form.is_valid():
         review = form.save(commit=False)
         review.product = product
@@ -86,6 +89,7 @@ def create_review(request, product_id):
             review.score = 0
 
         review.save()
+
         product.average_score = product.review_set.aggregate(Avg('score')).get('score__avg', 0.00)
         if product.average_score != None:
             product.average_score = round(product.average_score, 1)
@@ -129,7 +133,37 @@ def delete_product(request):
         return redirect(reverse('admin'), context=context)
 
 def delete_review(request):
-    return redirect(reverse('admin'))
+    if not request.user.is_authenticated():
+        return render(request, 'login.html')
+    else:
+        review_id = (str(request.POST.get('review_id')))
+        review = get_object_or_404(Review, pk=review_id)
+
+        if request.method == 'POST':
+            form = DeleteReviewForm(request.POST)
+
+            if form.is_valid():
+                review.delete()
+
+                product_id = (str(request.POST.get('product_id')))
+                product = get_object_or_404(Product, pk=product_id)
+
+                product.average_score = product.review_set.aggregate(Avg('score')).get('score__avg', 0.00)
+                if product.average_score != None:
+                    product.average_score = round(product.average_score, 1)
+                product.save()                
+
+        else:
+            form = DeleteReviewForm()
+
+        reviews = Review.objects.filter(flag=True)
+        messages.success(request, 'Comment removed successfully')
+        context = {
+                'reviews': reviews,
+                'form': form,
+            }
+          
+        return redirect(reverse('admin_review'), context=context)
 
 def detail(request, product_id):
     if not request.user.is_authenticated():
@@ -183,6 +217,7 @@ def flag_review(request, product_id):
             if form.is_valid():
                 review.flag = True
                 review.save()
+                messages.success(request, 'Comment has been marked for review.')
 
         else:
             form = FlagReviewForm()

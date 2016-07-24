@@ -53,8 +53,9 @@
 				                    </form>
 			                    </td>
 			                    <td>
-			                        <form action="#" role="form" method="post" onsubmit="">
+			                        <form action="{% url 'delete_review' %}" role="form" method="post" onsubmit="">
 			                        	{% csrf_token %}
+			                        	<input class="hidden" id="product_id" type="text" name="product_id" value={{ review.product }}>
 			                        	<input class="hidden" id="review_id" type="text" name="review_id" value={{ review.id }}>
 			                        	<input type="submit" class="btn btn-danger btn-md btn-block active" role="button" onclick="return confirmDelete('{{ review.id }}')" value="Remove Comment">
 			                        </form>
