@@ -1,3 +1,0 @@
-Django==1.9.8
-selenium==2.53.6
-vaderSentiment==0.5
