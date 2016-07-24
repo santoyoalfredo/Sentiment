@@ -2,31 +2,74 @@
 {% block products_active %}active{% endblock %}
 
 {% block body %}
+
+<!-- Credit to giorgitbs | http://jsfiddle.net/giorgitbs/52ak9/1/-->
+<script type="text/javascript">
+$(document).ready(function () {
+    
+    (function ($) {
+
+        $('#search').keyup(function () {
+
+            var rex = new RegExp($(this).val(), 'i');
+            $('.searchable tr').hide();
+            $('.searchable tr').filter(function () {
+
+                return rex.test($(this).text());
+            }).show();
+        })
+
+        $('#filter').keyup(function () {
+
+            var rex = new RegExp($(this).val(), 'i');
+            $('.searchable tr').hide();
+            $('.searchable tr').filter(function () {
+
+                return rex.test($(this).text());
+            }).show();
+        })
+    }(jQuery));
+});
+</script>
+
 <div class="container-fluid">
     <div class="row">
         <div class="col-xs-4 col-sm-2 col-md-2">
-            <h2>Filter features coming soon.</h2>
-        </div>
+            <h5>
+                <b>Search Products</b><br>
+                <div class="input-group"> <span class="input-group-addon"></span>
+                    <input id="search" type="text" class="form-control" placeholder="Type here...">
+                </div>
+            </h5>
+        </div>        
         <div class="col-xs-8 col-sm-10 col-md-10">
+        <table class="table table-hover" data-maintain-selected="true">
         {% if products %}
             {% for product in products %}
-                    <div class="thumbnail">
+                <tbody class="searchable">
+                <tr>
+                    <td>
                         <div class="row">
                             <div class="col-lg-2">
                                 <a href="{% url 'detail' product.id %}">
-                                <img src="{{ product.product_image }}" class="img-responsive">
+                                <img src="{{MEDIA_URL}}{{ product.image }}" class="img-responsive">
                                 </a>
                             </div>
-                        <div class="caption">
-                            <div class="col-lg-7">
-                                <h3>{{ product.name }}</h3>
-                                <h4>${{ product.price }}</h4>
-                                <!-- View Details -->
-                                <a href="{% url 'detail' product.id %}" class="btn btn-primary btn-sm" role="button">View Details</a>
+                            <div class="caption">
+                                <div class="col-lg-7">
+                                    <h3>{{ product.name }}</h3>
+                                    <h4>${{ product.price }}</h4>
+                                    <!-- View Details -->
+                                    <a href="{% url 'detail' product.id %}" class="btn btn-primary btn-sm" role="button">View Details</a>
+                                </div>
                             </div>
                         </div>
-                    </div>
-                </div>
+                    </td>
+                    <td style="display:none;">
+                        {{ product.type }}
+                    </td>
+                </tr>
+                </tbody>
                 {% cycle '' '' '' '' '' '<div class="clearfix visible-lg"></div>' %}
             {% endfor %}
         {% else %}
@@ -34,6 +77,8 @@
                 <h1>No Products</h1>
             </div>
         {% endif %}
+        </div>
+        </table>
     </div>
 </div>
 {% endblock %}

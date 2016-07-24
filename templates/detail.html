@@ -9,8 +9,8 @@
             <div class="panel panel-default">
                 <div class="panel-body">
                     <a href="{% url 'detail' product.id %}">
-                        {% if product.product_image %}
-                            <img src="{{ product.product_image }}" class="img-responsive">
+                        {% if product.image %}
+                            <img src="{{MEDIA_URL}}{{ product.image }}" class="img-responsive">
                         {% else %}
                             <h3>No image to display</h3>
                         {% endif %}

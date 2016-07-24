@@ -2,9 +2,30 @@ from django.contrib.auth import authenticate, login
 from django.contrib.auth import logout
 from django.db.models import Avg
 from django.shortcuts import render, get_object_or_404
-from .forms import UserForm, ReviewForm
+from .forms import ProductForm, ReviewForm, UserForm
 from .models import Product, Review
 from vaderSentiment.vaderSentiment import sentiment as vaderSentiment
+
+def admin(request):
+    if not request.user.is_authenticated():
+        return render(request, 'login.html')
+    else:
+        return render(request, 'admin.html')
+
+def add_product(request):
+    if not request.user.is_authenticated():
+        return render(request, 'login.html')
+    else:
+        form = ProductForm(request.POST or None, request.FILES or None)
+        if form.is_valid():
+            product = form.save(commit=False)
+            product.save()
+  
+        context = {
+            'form': form
+        }
+        
+        return render(request, 'add_product.html', context)
 
 def create_review(request, product_id):
     form = ReviewForm(request.POST or None, request.FILES or None)
@@ -45,10 +66,7 @@ def detail(request, product_id):
     else:
         user = request.user
         product = get_object_or_404(Product, pk=product_id)
-        # product.average_score = product.review_set.aggregate(Avg('score')).get('score__avg', 0.00)
-        # if product.average_score != None:
-        #     product.average_score = round(product.average_score, 1)
-        #     product.save()
+
         return render(request, 'detail.html', {'product': product, 'user': user})
 
 def flag_review(request, product_id, review_id):

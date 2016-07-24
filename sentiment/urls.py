@@ -31,9 +31,11 @@ app_name = 'product'
 urlpatterns = [
     url(r'^$', views.index, name='index'),
     url(r'^admin/', admin.site.urls),
+    url(r'^admincontrol/', views.admin, name='admin'),
+    url(r'^add_product', views.add_product, name='add_product'),
     url(r'^register/$', views.register, name='register'),
-    url(r'^login_user/$', views.login_user, name='login_user'),
-    url(r'^logout_user/$', views.logout_user, name='logout_user'),
+    url(r'^login/$', views.login_user, name='login_user'),
+    url(r'^logout/$', views.logout_user, name='logout_user'),
     url(r'^(?P<product_id>[0-9]+)/$', views.detail, name='detail'),
     url(r'^(?P<product_id>[0-9]+)/create_review/$', views.create_review, name='create_review'),
     url(r'^(?P<product_id>[0-9]+)/(?P<review_id>[0-9]+)/$', views.flag_review, name='flag_review')
@@ -41,3 +43,4 @@ urlpatterns = [
 
 if settings.DEBUG:
     urlpatterns += static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
+    urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

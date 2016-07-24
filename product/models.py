@@ -7,7 +7,9 @@ class Product(models.Model):
     name = models.CharField(max_length=250)
     price = models.DecimalField(max_digits=8, decimal_places=2)
     type = models.CharField(max_length=100)
-    product_image = models.CharField(max_length=1000)
+    image = models.ImageField(null=True, blank=True, width_field='width_field', height_field='height_field')
+    height_field = models.IntegerField(default=0, null=True)
+    width_field = models.IntegerField(default=0, null=True)
     product_desc = models.TextField(max_length=2000)
     average_score = models.DecimalField(max_digits=8, decimal_places=1, default=0)
 
