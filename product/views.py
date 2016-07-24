@@ -1,8 +1,8 @@
 from django.contrib.auth import authenticate, login
 from django.contrib.auth import logout
 from django.db.models import Avg
-from django.shortcuts import render, get_object_or_404
-from .forms import ProductForm, ReviewForm, UserForm
+from django.shortcuts import render, get_object_or_404, redirect
+from .forms import DeleteProductForm, ProductForm, ReviewForm, UserForm
 from .models import Product, Review
 from vaderSentiment.vaderSentiment import sentiment as vaderSentiment
 
@@ -10,7 +10,14 @@ def admin(request):
     if not request.user.is_authenticated():
         return render(request, 'login.html')
     else:
-        return render(request, 'admin.html')
+        form = DeleteProductForm
+        products = Product.objects.all()
+        context = {
+                'products': products,
+                'message': 'none',
+                'form': form
+            }
+        return render(request, 'admin.html', context)
 
 def add_product(request):
     if not request.user.is_authenticated():
@@ -20,12 +27,20 @@ def add_product(request):
         if form.is_valid():
             product = form.save(commit=False)
             product.save()
-  
-        context = {
-            'form': form
-        }
-        
-        return render(request, 'add_product.html', context)
+            products = Product.objects.all()
+            context = {
+                'products': products,
+                'message': 'Product added successfully'
+            }
+          
+            return render(request, 'admin.html', context)
+
+        else:
+            context = {
+                'form': form
+            }
+
+            return render(request, 'add_product.html', context)
 
 def create_review(request, product_id):
     form = ReviewForm(request.POST or None, request.FILES or None)
@@ -59,6 +74,32 @@ def create_review(request, product_id):
         'form': form,
     }
     return render(request, 'create_review.html', context)
+
+def delete_product(request):
+    if not request.user.is_authenticated():
+        return render(request, 'login.html')
+    else:
+        product_id = (str(request.POST.get('product_id')))
+        product = get_object_or_404(Product, pk=product_id)
+
+        if request.method == 'POST':
+            form = DeleteProductForm(request.POST)
+
+            if form.is_valid():
+                product.delete()
+                # return HttpResponseRedirect("admin.html") # wherever to go after deleting
+
+        else:
+            form = DeleteProductForm()
+
+        products = Product.objects.all()
+        context = {
+                'products': products,
+                'form': form,
+                'message': 'Product removed successfully'
+            }
+          
+        return render(request, 'admin.html', context)
 
 def detail(request, product_id):
     if not request.user.is_authenticated():

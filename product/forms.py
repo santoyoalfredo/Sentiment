@@ -2,7 +2,18 @@ from django import forms
 from django.contrib.auth.models import User
 from .models import Product, Review
 
+class DeleteProductForm(forms.ModelForm):
+    class Meta:
+        model = Product
+        fields = []
+
 class ProductForm(forms.ModelForm):
+    
+    class Meta:
+        model = Product
+        fields = ['name', 'price', 'type', 'image', 'product_desc']
+
+class ProductFormAdmin(forms.ModelForm):
     
     class Meta:
         model = Product
