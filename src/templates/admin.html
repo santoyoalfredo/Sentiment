@@ -16,19 +16,12 @@
 </script>
 
 <div class="container-fluid">
-	{% if messages %}
-		{% for message in messages %}
-			<div class="show"><p class="bg-success">{{ message }}</p></div>
-		{% endfor %}
-	{% else %}
-		<div class="invisible"><p class="bg-success">no message</p></div>
-	{% endif %}
+	{% include 'messages.html' %}
 	<h4>
 		Admin Control Panel:
 	</h4>
 	<div class="row">
 		<div class="col-xs-4 col-sm-3 col-md-7">
-                <!-- <b>Filter Products</b><br> -->
             <div class="input-group"> <span class="input-group-addon">Filter Products</span>
                 <input id="filter" type="text" class="form-control" placeholder="Type here...">
             </div>

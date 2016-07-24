@@ -2,6 +2,11 @@ from django import forms
 from django.contrib.auth.models import User
 from .models import Product, Review
 
+class DeleteReviewForm(forms.ModelForm):
+    class Meta:
+        model = Review
+        fields = []
+
 class DeleteProductForm(forms.ModelForm):
     class Meta:
         model = Product

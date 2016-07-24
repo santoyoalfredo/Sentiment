@@ -1,0 +1,7 @@
+{% if messages %}
+    {% for message in messages %}
+        <div class="show"><p{% if message.tags %} class="bg-{{ message.tags }}"{% endif %}>{{ message }}</p></div>
+    {% endfor %}
+{% else %}
+    <div class="invisible"><p class="bg-success">no message</p></div>
+{% endif %}

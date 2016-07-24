@@ -4,7 +4,7 @@ from django.contrib.auth import authenticate, login
 from django.contrib.auth import logout
 from django.db.models import Avg
 from django.shortcuts import render, get_object_or_404, redirect
-from .forms import DeleteProductForm, FlagReviewForm, ProductForm, ReviewForm, UserForm
+from .forms import DeleteReviewForm, DeleteProductForm, FlagReviewForm, ProductForm, ReviewForm, UserForm
 from .models import Product, Review
 from vaderSentiment.vaderSentiment import sentiment as vaderSentiment
 
@@ -16,10 +16,21 @@ def admin(request):
         products = Product.objects.all()
         context = {
                 'products': products,
-                'message': 'none',
                 'form': form
             }
         return render(request, 'admin.html', context)
+
+def adminReviews(request):
+    if not request.user.is_authenticated():
+        return render(request, 'login.html')
+    else:
+        form = DeleteReviewForm
+        reviews = Review.objects.filter(flag=True)
+        context = {
+                'reviews': reviews,
+                'form': form
+            }
+        return render(request, 'admin_reviews.html', context)
 
 def add_product(request):
     if not request.user.is_authenticated():
@@ -47,6 +58,17 @@ def add_product(request):
 def create_review(request, product_id):
     form = ReviewForm(request.POST or None, request.FILES or None)
     product = get_object_or_404(Product, pk=product_id)
+
+    for review in Review.objects.filter(product=product_id):
+        if review.user == request.user:
+            context={
+                'userCommented': True,
+                'product': product,
+                'message': messages.info(request, 'You have already submitted a comment for this product.')
+            }
+
+            return redirect(reverse('detail', kwargs={'product_id': product_id}), context=context)
+
     product.average_score = product.review_set.aggregate(Avg('score')).get('score__avg', 0.00)
     if product.average_score != None:
         product.average_score = round(product.average_score, 1)
@@ -106,14 +128,19 @@ def delete_product(request):
           
         return redirect(reverse('admin'), context=context)
 
+def delete_review(request):
+    return redirect(reverse('admin'))
+
 def detail(request, product_id):
     if not request.user.is_authenticated():
         return render(request, 'login.html')
     else:
-        user = request.user
-        product = get_object_or_404(Product, pk=product_id)
+        context = {
+            'user': request.user,
+            'product': get_object_or_404(Product, pk=product_id),
+        }
 
-        return render(request, 'detail.html', {'product': product, 'user': user})
+        return render(request, 'detail.html', context)
 
 def edit_product(request):
     if not request.user.is_authenticated():
@@ -216,3 +243,28 @@ def register(request):
         "form": form,
     }
     return render(request, 'register.html', context)
+
+def unflag_review(request):
+    if not request.user.is_authenticated():
+        return render(request, 'login.html')
+    else:
+        review_id = (str(request.POST.get('review_id')))
+        review = get_object_or_404(Review, pk=review_id)
+
+        if request.method == 'POST':
+            form = FlagReviewForm(request.POST)
+
+            if form.is_valid():
+                review.flag = False
+                review.save()
+
+        else:
+            form = FlagReviewForm()
+                
+        reviews = Review.objects.filter(flag=True)
+        context = {
+            'reviews': reviews,
+            'message': messages.success(request, 'Comment was successfully unflagged.')
+        }
+
+        return redirect(reverse('admin_review'), context=context)
