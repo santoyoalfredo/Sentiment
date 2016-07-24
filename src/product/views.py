@@ -47,10 +47,10 @@ def add_product(request):
             product = form.save(commit=False)
             product.save()
             products = Product.objects.all()
-            messages.success(request, 'Product added successfully')
             context = {
                 'products': products,
             }
+            messages.success(request, 'Product added successfully')
           
             return redirect(reverse('admin'), context=context)
 
@@ -70,8 +70,8 @@ def create_review(request, product_id):
             context={
                 'userCommented': True,
                 'product': product,
-                'message': messages.info(request, 'You have already submitted a comment for this product.')
             }
+            messages.info(request, 'You have already submitted a comment for this product')
 
             return redirect(reverse('detail', kwargs={'product_id': product_id}), context=context)
 
@@ -98,6 +98,7 @@ def create_review(request, product_id):
         context={
             'product': product
         }
+        messages.success(request, 'Comment submitted')
 
         return redirect(reverse('detail', kwargs={'product_id': product_id}), context=context)
 
@@ -124,11 +125,12 @@ def delete_product(request):
             form = DeleteProductForm()
 
         products = Product.objects.all()
-        messages.success(request, 'Product removed successfully')
+        
         context = {
                 'products': products,
                 'form': form,
             }
+        messages.success(request, 'Product removed successfully')
           
         return redirect(reverse('admin'), context=context)
 
@@ -157,11 +159,11 @@ def delete_review(request):
             form = DeleteReviewForm()
 
         reviews = Review.objects.filter(flag=True)
-        messages.success(request, 'Comment removed successfully')
         context = {
                 'reviews': reviews,
                 'form': form,
             }
+        messages.success(request, 'Comment removed successfully')
           
         return redirect(reverse('admin_review'), context=context)
 
@@ -188,10 +190,10 @@ def edit_product(request):
             product = form.save(commit=False)
             product.save()
             products = Product.objects.all()
-            messages.success(request, 'Product edited successfully')
             context = {
                 'products': products,
             }
+            messages.success(request, 'Product edited successfully')
           
             return redirect(reverse('admin'), context=context)
 
@@ -217,7 +219,7 @@ def flag_review(request, product_id):
             if form.is_valid():
                 review.flag = True
                 review.save()
-                messages.success(request, 'Comment has been marked for review.')
+                messages.success(request, 'Comment has been marked for review')
 
         else:
             form = FlagReviewForm()
@@ -245,7 +247,13 @@ def login_user(request):
             if user.is_active:
                 login(request, user)
                 products = Product.objects.all()
-                return render(request, 'index.html', {'products': products})
+                context = {
+                    'products': products
+                }
+                messages.info(request, 'Welcome, {name}!'.format(name=username))
+
+                return redirect(reverse('index'), context=context)
+                # return render(request, 'index.html', context)
             else:
                 return render(request, 'login.html', {'error_message': 'Your account has been disabled'})
         else:
@@ -299,7 +307,7 @@ def unflag_review(request):
         reviews = Review.objects.filter(flag=True)
         context = {
             'reviews': reviews,
-            'message': messages.success(request, 'Comment was successfully unflagged.')
         }
+        messages.success(request, 'Comment was successfully unflagged')
 
         return redirect(reverse('admin_review'), context=context)

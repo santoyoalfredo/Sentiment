@@ -22,6 +22,15 @@
             <ul class="nav navbar-nav">
                 <li class="{% block products_active %}{% endblock %}"><a href="{% url 'index' %}"><span class="glyphicon glyphicon-gift" aria-hidden="true"></span>&nbsp; Products</a></li>
             </ul>
+            {% if request.path = '/' %}
+            <ul class="nav navbar-nav">
+                <form class="navbar-form navbar-left" role="search">
+                    <div class="input-group"> <span class="input-group-addon">Product Search</span>
+                    <input id="filter" type="text" class="form-control" placeholder="Type here...">
+                </div>
+                </form>
+            </ul>
+            {% endif %}
             <ul class="nav navbar-nav navbar-right">
                 <li>
                     <a href="#">
