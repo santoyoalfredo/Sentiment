@@ -3,7 +3,16 @@
         <div class="col-sm-offset-2 col-sm-10">
             <span class="text-danger small">{{ field.errors }}</span>
         </div>
-        <label class="control-label col-sm-2" for="user">{{ field.label_tag }}</label>
-        <div class="col-sm-10">{{ field }}</div>
+        <label class="control-label col-sm-2" for="user">
+        	{{ field.label_tag }}
+        </label>
+        <div class="col-sm-10">
+        	{% if field.name = 'image' and field.value %}
+        	<div>
+        		<img src="{{ form.instance.image.url }}" class="img-responsive img-thumbnail" width="200" height="200"></img><br>
+        	</div>
+        	{% endif %}
+        	{{ field }}
+        </div>
     </div>
 {% endfor %}

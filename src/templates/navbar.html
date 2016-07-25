@@ -19,6 +19,7 @@
         </div>
         <!-- Items -->
         <div class="collapse navbar-collapse" id="topNavBar">
+            {% if user.is_authenticated %}
             <ul class="nav navbar-nav">
                 <li class="{% block products_active %}{% endblock %}"><a href="{% url 'index' %}"><span class="glyphicon glyphicon-gift" aria-hidden="true"></span>&nbsp; Products</a></li>
             </ul>
@@ -50,6 +51,12 @@
                     </a>
                 </li>
             </ul>
+            {% else %}
+            <ul class="nav navbar-nav">
+                <li class="{% block register_active %}{% endblock %}"><a href="{% url 'register' %}">Register</a></li>
+                <li class="{% block login_active %}{% endblock %}"><a href="{% url 'login_user' %}">Log In</a></li>
+            </ul>
+            {% endif %}
         </div>
     </div>
 </nav>

@@ -1,19 +1,21 @@
-{% extends 'base.html' %}
+{% extends 'navbar.html' %}
 {% block title %}Admin Control{% endblock %}
 
 {% block body %}
 
 <div class="container-fluid">
-	{% include 'messages.html' %}
-	<h4>
-		Admin Control Panel:
-	</h4>
-	<div class="row">
-		<div class="col-md-3">
-			<a href="{% url 'admin_product' %}" class="btn btn-primary btn-md btn-block active" role="button">Products</a>
-		</div>
-		<div class="col-md-3">
-			<a href="{% url 'admin_review' %}" class="btn btn-primary btn-md btn-block active" role="button">Reviews</a>
+	<div class="panel panel-default">
+            <div class="panel-body">
+			{% include 'messages.html' %}
+			<h4>Admin Control Panel:</h4>
+			<div class="row">
+				<div class="col-md-3">
+					<a href="{% url 'admin_product' %}" class="btn btn-primary btn-md btn-block active" role="button">Products</a>
+				</div>
+				<div class="col-md-3">
+					<a href="{% url 'admin_review' %}" class="btn btn-primary btn-md btn-block active" role="button">Reviews</a>
+				</div>
+			</div>
 		</div>
 	</div>
 </div>

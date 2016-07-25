@@ -1,4 +1,4 @@
-{% extends 'base.html' %}
+{% extends 'navbar.html' %}
 {% block products_active %}active{% endblock %}
 
 {% block body %}
@@ -15,42 +15,50 @@
             </h5>
         </div>   -->      
         <div class="col-xs-8 col-sm-10 col-md-10">
-        <table class="table table-hover" data-maintain-selected="true">
-        {% if products %}
-            {% for product in products %}
-                <tbody class="searchable">
-                <tr>
-                    <td>
-                        <div class="row">
-                            <div class="col-lg-2">
-                                <a href="{% url 'detail' product.id %}">
-                                <img src="{{MEDIA_URL}}{{ product.image }}" class="img-responsive">
-                                </a>
-                            </div>
-                            <div class="caption">
-                                <div class="col-lg-7">
-                                    <h3>{{ product.name }}</h3>
-                                    <h4>${{ product.price }}</h4>
-                                    <!-- View Details -->
-                                    <a href="{% url 'detail' product.id %}" class="btn btn-primary btn-sm" role="button">View Details</a>
+            <div class="panel panel-default">
+                <div class="panel-body">
+                <table class="table table-hover" data-maintain-selected="true">
+                {% if products %}
+                    {% for product in products %}
+                        <tbody class="searchable">
+                        <tr>
+                            <td>
+                                <div class="row">
+                                    <div class="col-lg-2">
+                                        <a href="{% url 'detail' product.id %}">
+                                        {% if product.image %}
+                                            <img src="{{MEDIA_URL}}{{ product.image }}" class="img-responsive img-thumbnail">
+                                        {% else %}
+                                            <img src="{{MEDIA_URL}}default.jpg" class="img-responsive img-thumbnail">
+                                        {% endif %}
+                                        </a>
+                                    </div>
+                                    <div class="caption">
+                                        <div class="col-lg-7">
+                                            <h3>{{ product.name }}</h3>
+                                            <h4>${{ product.price }}</h4>
+                                            <!-- View Details -->
+                                            <a href="{% url 'detail' product.id %}" class="btn btn-primary btn-sm" role="button">View Details</a>
+                                        </div>
+                                    </div>
                                 </div>
-                            </div>
-                        </div>
-                    </td>
-                    <td style="display:none;">
-                        {{ product.type }}
-                    </td>
-                </tr>
-                </tbody>
-                {% cycle '' '' '' '' '' '<div class="clearfix visible-lg"></div>' %}
-            {% endfor %}
-        {% else %}
-            <div class="col-sm-12">
-                <h1>No Products</h1>
+                            </td>
+                            <td style="display:none;">
+                                {{ product.type }}
+                            </td>
+                        </tr>
+                        </tbody>
+                        {% cycle '' '' '' '' '' '<div class="clearfix visible-lg"></div>' %}
+                    {% endfor %}
+                {% else %}
+                    <div class="col-sm-12">
+                        <h1>No Products</h1>
+                    </div>
+                {% endif %}
+                </div>
+                </table>
             </div>
-        {% endif %}
         </div>
-        </table>
     </div>
 </div>
 {% endblock %}
