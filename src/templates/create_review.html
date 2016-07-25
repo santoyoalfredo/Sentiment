@@ -17,8 +17,14 @@
                     </a>
                     <h1>{{ product.name }} <small>{{ product.type }}</small></h1>
                     <h2>${{ product.price }}</h2>
-                    <h3 style="margin-top:30px">Score: <big>{{ product.average_score }}</big>
-                        {% if product.average_score != None %} / <small>10</small>{% endif %}</h3>
+                    <h3 style="margin-top:30px">
+                        Score:
+                        {% if product.average_score != -1 %}
+                            <big>{{ product.average_score }}</big> / <small>10</small>
+                        {% else %}
+                            Not yet rated
+                        {% endif %}
+                    </h3>
                 </div>
             </div>
         </div>
