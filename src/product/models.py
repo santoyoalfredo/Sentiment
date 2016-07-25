@@ -1,12 +1,14 @@
+from django.core.validators import MinValueValidator
 from django.core.urlresolvers import reverse
 from django.contrib.auth.models import Permission, User
 from django.db import models
 from django import forms
+from decimal import Decimal
 
 # Product Model
 class Product(models.Model):
     name = models.CharField(max_length=250)
-    price = models.DecimalField(max_digits=8, decimal_places=2)
+    price = models.DecimalField(max_digits=8, decimal_places=2, validators=[MinValueValidator(Decimal('0.01'))])
     type = models.CharField(max_length=100)
     image = models.ImageField(null=True, blank=True, width_field='width_field', height_field='height_field')
     height_field = models.IntegerField(default=0, null=True)

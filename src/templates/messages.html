@@ -1,7 +1,7 @@
 {% if messages %}
     {% for message in messages %}
-        <div class="show"><p{% if message.tags %} class="bg-{{ message.tags }}"{% endif %}>{{ message }}</p></div>
+    	{% if message.tags %}
+        	<div class="show alert alert-{{ message.tags }} alert-dismissible fade in">{{ message }}<a class="close" data-dismiss="alert">×</a></div>
+        {% endif %}
     {% endfor %}
-{% else %}
-    <div class="invisible"><p class="bg-success">no message</p></div>
 {% endif %}
